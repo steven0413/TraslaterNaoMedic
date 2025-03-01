@@ -1,9 +1,10 @@
 // src/App.js
+import VoiceInputButton from './components/VoiceInputButton';
 import React, { useState, useEffect } from 'react';
 import LanguageSelector from './components/LanguageSelector';
 import TextAreas from './components/TextAreas';
 import SpeakButton from './components/SpeakButton';
-import './App.css'; // Importa el CSS para estilosimport VoiceInputButton from './components/VoiceInputButton';
+import './App.css'; // Importa el CSS para estilos
 
 
 function App() {
@@ -65,7 +66,7 @@ function App() {
 
   return (
     <div className="App">
-  <h1>Traductor Sanitario con IA</h1>
+  <h1>Traductor Nao Medical con IA</h1>
   <LanguageSelector
     sourceLanguage={sourceLanguage}
     targetLanguage={targetLanguage}
