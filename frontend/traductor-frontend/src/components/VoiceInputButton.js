@@ -1,34 +1,34 @@
-// src/components/VoiceInputButton.js
+// funciones React
 import React, { useState, useRef, useCallback } from 'react';
-import VoiceInputButton from './components/VoiceInputButton';
 
-
+// Componente funcional VoiceInputButton
 function VoiceInputButton({ onTranscription }) {
     const [isRecording, setIsRecording] = useState(false);
-    const mediaRecorder = useRef(null); // Usamos useRef para mantener el mediaRecorder entre renders
-    const audioChunks = useRef([]); // useRef para los chunks de audio
-    const recognition = useRef(null); // Para SpeechRecognition (alternativa, menos control sobre el audio)
-    const [useSpeechRecognition, setUseSpeechRecognition] = useState(false); // Decide si usar MediaRecorder o SpeechRecognition
+    const mediaRecorder = useRef(null); 
+    const audioChunks = useRef([]); 
+    const recognition = useRef(null); 
+    const [useSpeechRecognition, setUseSpeechRecognition] = useState(false); 
 
+    // Función para iniciar la grabación de audio con MediaRecorder
     const startRecordingWithMediaRecorder = useCallback(async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            mediaRecorder.current = new MediaRecorder(stream, { mimeType: 'audio/webm; codecs=opus' }); // WEBM_OPUS para compatibilidad con Google Cloud Speech-to-Text
+            mediaRecorder.current = new MediaRecorder(stream, { mimeType: 'audio/webm; codecs=opus' });
 
             mediaRecorder.current.ondataavailable = event => {
-                audioChunks.current.push(event.data); // Almacenar los chunks de audio
+                audioChunks.current.push(event.data); 
             };
 
             mediaRecorder.current.onstop = async () => {
                 const audioBlob = new Blob(audioChunks.current, { type: 'audio/webm; codecs=opus' });
-                audioChunks.current = []; // Limpiar chunks para la próxima grabación
+                audioChunks.current = []; 
                 setIsRecording(false);
 
-                // Convertir Blob a Base64 para enviar al backend (puedes explorar otras opciones como ArrayBuffer si es más eficiente)
+                
                 const reader = new FileReader();
                 reader.onloadend = () => {
-                    const base64Audio = reader.result.split(',')[1]; // Extraer la parte base64 después de 'data:audio/webm; codecs=opus;base64,'
-                    sendAudioToBackend(base64Audio); // Enviar audio base64 al backend
+                    const base64Audio = reader.result.split(',')[1]; 
+                    sendAudioToBackend(base64Audio); 
                 };
                 reader.readAsDataURL(audioBlob);
             };
@@ -42,14 +42,14 @@ function VoiceInputButton({ onTranscription }) {
             alert('Error al iniciar la grabación de audio. Asegúrate de dar permisos de micrófono y que tu navegador soporta MediaRecorder.');
             setIsRecording(false);
         }
-    }, [onTranscription]); // 'onTranscription' como dependencia de useCallback
+    }, [onTranscription]); 
 
 
     const startRecordingWithSpeechRecognition = useCallback(() => {
-        recognition.current = new window.webkitSpeechRecognition() || new window.SpeechRecognition(); // Compatibilidad con Chrome y otros navegadores
-        recognition.current.continuous = false; // Transcripción de una sola "frase"
-        recognition.current.interimResults = false; // No mostrar resultados intermedios (puedes cambiar a true para feedback en tiempo real)
-        recognition.current.lang = 'es-ES'; // Idioma por defecto, pero deberías permitir que el usuario lo configure.  Usa el prop 'sourceLanguage' del LanguageSelector.
+        recognition.current = new window.webkitSpeechRecognition() || new window.SpeechRecognition();
+        recognition.current.continuous = false; 
+        recognition.current.interimResults = false; 
+        recognition.current.lang = 'es-ES'; 
 
         recognition.current.onstart = () => {
             setIsRecording(true);
@@ -61,7 +61,7 @@ function VoiceInputButton({ onTranscription }) {
                 .map(result => result[0].transcript)
                 .join('');
             setIsRecording(false);
-            onTranscription(transcript); // Enviar transcripción al componente App a través del prop 'onTranscription'
+            onTranscription(transcript); 
             console.log('Transcripción de SpeechRecognition:', transcript);
         };
 
@@ -81,18 +81,18 @@ function VoiceInputButton({ onTranscription }) {
         recognition.current.start();
 
 
-    }, [onTranscription]); // 'onTranscription' como dependencia de useCallback
+    }, [onTranscription]); 
 
     const stopRecordingWithMediaRecorder = useCallback(() => {
         if (mediaRecorder.current && mediaRecorder.current.state === "recording") {
-            mediaRecorder.current.stop(); // Detener MediaRecorder, el evento 'onstop' se encargará de enviar al backend
+            mediaRecorder.current.stop(); 
             console.log('Grabación detenida con MediaRecorder.');
         }
     }, []);
 
     const stopRecordingWithSpeechRecognition = useCallback(() => {
         if (recognition.current) {
-            recognition.current.stop(); // Detener SpeechRecognition, el evento 'onresult' se encargará de la transcripción
+            recognition.current.stop(); 
             setIsRecording(false);
             console.log('Grabación detenida con SpeechRecognition.');
         }
@@ -101,12 +101,12 @@ function VoiceInputButton({ onTranscription }) {
 
     const sendAudioToBackend = async (base64Audio) => {
         try {
-            const response = await fetch('http://localhost:5000/transcribe', { // Ajusta la URL si tu backend está en otro lugar
+            const response = await fetch('http://localhost:5000/transcribe', { 
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ audioData: base64Audio, sourceLanguage: 'es-ES' }) // Envía audio base64 y el idioma (puedes obtener el idioma seleccionado por el usuario desde App.js si lo pasas como prop)
+                body: JSON.stringify({ audioData: base64Audio, sourceLanguage: 'es-ES' }) 
             });
 
             if (!response.ok) {
@@ -114,13 +114,13 @@ function VoiceInputButton({ onTranscription }) {
             }
 
             const data = await response.json();
-            onTranscription(data.transcribedText); // Enviar texto transcrito al componente App a través del prop 'onTranscription'
+            onTranscription(data.transcribedText); 
             console.log('Transcripción recibida del backend:', data.transcribedText);
 
 
         } catch (error) {
             console.error('Error al enviar audio al backend para transcripción:', error);
-            alert('Error al enviar audio al backend para transcripción. Intenta de nuevo.');
+            alert('Marca campo requerido SpeechRecognition API');
         }
     };
 
@@ -142,10 +142,9 @@ function VoiceInputButton({ onTranscription }) {
         }
     };
 
-
     const handleToggleUseSpeechRecognition = () => {
         setUseSpeechRecognition(!useSpeechRecognition);
-        setIsRecording(false); // Detener cualquier grabación activa al cambiar de método
+        setIsRecording(false); 
         if (mediaRecorder.current && mediaRecorder.current.state === "recording") {
             stopRecordingWithMediaRecorder();
         }
@@ -154,15 +153,14 @@ function VoiceInputButton({ onTranscription }) {
         }
     };
 
-
     return (
         <div>
             <button onClick={handleRecordButtonClick}>
-                {isRecording ? 'Detener Grabación' : 'Iniciar Grabación'}
+                {isRecording ? 'Detener Grabación' : 'Hablar'}
             </button>
 
              <label>
-                Usar SpeechRecognition API (Navegador, más simple, menos control):
+                Usar SpeechRecognition API:
                 <input
                     type="checkbox"
                     checked={useSpeechRecognition}

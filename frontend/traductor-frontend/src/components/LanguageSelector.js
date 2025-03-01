@@ -1,11 +1,10 @@
-// src/components/LanguageSelector.js
 import React from 'react';
 
 function LanguageSelector({ sourceLanguage, targetLanguage, onSourceLanguageChange, onTargetLanguageChange, languages }) {
   return (
     <div>
       <div>
-        <label htmlFor="sourceLanguage">Idioma de Origen:</label>
+        <label htmlFor="sourceLanguage">Selecciona el idioma de origen:</label>
         <select
           id="sourceLanguage"
           value={sourceLanguage}
@@ -17,7 +16,7 @@ function LanguageSelector({ sourceLanguage, targetLanguage, onSourceLanguageChan
         </select>
       </div>
       <div>
-        <label htmlFor="targetLanguage">Idioma de Destino:</label>
+        <label htmlFor="targetLanguage">Selecciona el idioma de destino:</label>
         <select
           id="targetLanguage"
           value={targetLanguage}
