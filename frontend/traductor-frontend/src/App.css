@@ -1,0 +1,71 @@
+/* src/App.css */
+.App {
+  font-family: sans-serif;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.App h1 {
+  margin-bottom: 20px;
+}
+
+.App > div { /* Estilos para los contenedores de componentes */
+  margin-bottom: 15px;
+  width: 80%; /* Ancho para que no sea muy ancho en pantallas grandes */
+  max-width: 800px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+textarea {
+  width: 100%;
+  min-height: 150px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box; /* Importante para que el padding no aumente el ancho total */
+  font-family: monospace; /* O una fuente legible para texto médico */
+}
+
+.translated-text-area {
+  width: 100%;
+  min-height: 150px;
+  padding: 10px;
+  border: 1px solid #eee; /* Borde más suave para el área traducida */
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  box-sizing: border-box;
+  white-space: pre-wrap; /* Respeta saltos de línea en la traducción */
+  font-family: monospace;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #007bff; /* Color azul típico */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+button:hover {
+  background-color: #0056b3; /* Azul más oscuro al pasar el ratón */
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+select {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
