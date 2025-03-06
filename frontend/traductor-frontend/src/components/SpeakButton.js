@@ -9,12 +9,6 @@ function SpeakButton({ translatedText }) {
       alert('La Text-to-Speech API no es soportada por tu navegador.');
     }
   };
-
-  return (
-    <button onClick={handleSpeak} disabled={!translatedText}>
-      Hablar
-    </button>
-  );
 }
 
 export default SpeakButton;

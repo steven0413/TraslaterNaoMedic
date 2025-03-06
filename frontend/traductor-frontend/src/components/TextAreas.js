@@ -1,4 +1,3 @@
-// src/components/TextAreas.js
 import React from 'react';
 
 function TextAreas({ originalText, translatedText, onTextChange }) {

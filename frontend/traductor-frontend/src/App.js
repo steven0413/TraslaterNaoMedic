@@ -1,18 +1,17 @@
-// src/App.js
 import VoiceInputButton from './components/VoiceInputButton';
 import React, { useState, useEffect } from 'react';
 import LanguageSelector from './components/LanguageSelector';
 import TextAreas from './components/TextAreas';
 import SpeakButton from './components/SpeakButton';
-import './App.css'; // Importa el CSS para estilos
+import './App.css'; 
 
 
 function App() {
-  const [sourceLanguage, setSourceLanguage] = useState('es'); // Idioma de origen inicial (español)
-  const [targetLanguage, setTargetLanguage] = useState('en'); // Idioma de destino inicial (inglés)
+  const [sourceLanguage, setSourceLanguage] = useState('es','en','fr'); // Idioma de origen
+  const [targetLanguage, setTargetLanguage] = useState('en');
   const [originalText, setOriginalText] = useState('');
   const [translatedText, setTranslatedText] = useState('');
-  const [languages, setLanguages] = useState(['es', 'en', 'fr', 'de']); // Lista de idiomas soportados
+  const [languages] = useState(['es', 'en', 'fr']); // Lista de idiomas soportados
 
   const handleSourceLanguageChange = (event) => {
     setSourceLanguage(event.target.value);
@@ -27,17 +26,16 @@ function App() {
   };
 
   useEffect(() => {
-    // Realizar la traducción cuando cambia el texto original o el idioma de destino
     if (originalText && targetLanguage) {
       translateText();
     } else {
-      setTranslatedText(''); // Limpiar la traducción si no hay texto o idioma de destino
+      setTranslatedText(''); 
     }
-  }, [originalText, targetLanguage]); // Dependencias del useEffect
+  }, [originalText, targetLanguage]); 
 
   const translateText = async () => {
     try {
-      const response = await fetch('http://localhost:5000/translate', { // Reemplaza con la URL de tu backend si es diferente
+      const response = await fetch('http://localhost:5000/translate', { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -53,7 +51,7 @@ function App() {
       }
 
       const data = await response.json();
-      setTranslatedText(data.translatedText); // Asume que el backend devuelve la traducción directamente como texto
+      setTranslatedText(data.translatedText); 
     } catch (error) {
       console.error("Error al traducir:", error);
       setTranslatedText('Error en la traducción. Por favor, intenta de nuevo.');
@@ -61,12 +59,12 @@ function App() {
   };
 
   const handleVoiceTranscription = (transcribedText) => {
-    setOriginalText(transcribedText); // Actualizar el área de texto original con la transcripción
+    setOriginalText(transcribedText); 
   };
 
   return (
     <div className="App">
-  <h1>Traductor Nao Medical con IA</h1>
+  <h1>NaoMedical Translator</h1>
   <LanguageSelector
     sourceLanguage={sourceLanguage}
     targetLanguage={targetLanguage}
@@ -74,7 +72,7 @@ function App() {
     onTargetLanguageChange={handleTargetLanguageChange}
     languages={languages}
   />
-  <VoiceInputButton onTranscription={handleVoiceTranscription} /> {/* ¡Añadido VoiceInputButton aquí! */}
+  <VoiceInputButton onTranscription={handleVoiceTranscription} sourceLanguage={sourceLanguage} /> {}
 
   <TextAreas
     originalText={originalText}

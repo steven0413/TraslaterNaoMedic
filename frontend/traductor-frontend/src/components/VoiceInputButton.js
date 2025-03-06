@@ -2,7 +2,7 @@
 import React, { useState, useRef, useCallback } from 'react';
 
 // Componente funcional VoiceInputButton
-function VoiceInputButton({ onTranscription }) {
+function VoiceInputButton({ onTranscription, sourceLanguage }) {
     const [isRecording, setIsRecording] = useState(false);
     const mediaRecorder = useRef(null); 
     const audioChunks = useRef([]); 
@@ -106,7 +106,7 @@ function VoiceInputButton({ onTranscription }) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ audioData: base64Audio, sourceLanguage: 'es-ES' }) 
+                body: JSON.stringify({ audioData: base64Audio, sourceLanguage: sourceLanguage })
             });
 
             if (!response.ok) {

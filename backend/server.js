@@ -1,3 +1,59 @@
+const speech = require('@google-cloud/speech').v1p1beta1; 
+
+// SDK de Google Cloud Speech-to-Text
+const speechClient = new speech.SpeechClient({
+    keyFilename: 'traslatenaomedical-6c6ec2ab1f7d.json', 
+});
+
+
+// Si ocurre un error durante la transcripción, se captura y se devuelve un error 500 con detalles.
+app.post('/transcribe', async (req, res) => {
+    console.log('[SERVER] languageCode from frontend:', req.body.sourceLanguage); 
+    try {
+       
+        const audioBytes = req.body.audioData; 
+
+        if (!audioBytes) {
+            return res.status(400).json({ error: 'No se proporcionaron datos de audio.' });
+        }
+
+        const audio = {
+            content: audioBytes, 
+        };
+        const config = {
+            encoding: 'WEBM_OPUS', 
+            sampleRateHertz: 48000, 
+            languageCode: req.body.sourceLanguage, 
+            model: 'medical_dictation', 
+            useEnhanced: true, 
+            
+        };
+        const request = {
+            audio: audio,
+            config: config,
+        };
+
+        console.log('[SERVER] Iniciando transcripción con Google Cloud Speech-to-Text API...');
+        const [response] = await speechClient.recognize(request); 
+        const transcription = response.results
+            .map(result => result.alternatives[0].transcript)
+            .join('\n'); 
+
+
+        console.log('[SERVER] Transcripción exitosa:', transcription);
+        res.json({ transcribedText: transcription }); 
+
+    } catch (error) {
+        console.error('[SERVER] Error en la transcripción con Google Cloud Speech-to-Text API:', error);
+        res.status(500).json({ error: 'Error al transcribir el audio.', details: error.message });
+    }
+});
+
+
+
+
+/*
+ChatGTP
 const express = require('express');
 const cors = require('cors');
 const { OpenAI } = require('openai');
@@ -7,7 +63,6 @@ const app = express();
 const port = 5000;
 
 const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
 });
 
 app.use(cors());
@@ -51,4 +106,7 @@ app.post('/translate', async (req, res) => {
 
 app.listen(port, () => {
     console.log(`Servidor backend corriendo en http://localhost:${port}`);
-});
+});*/
+
+
+
