@@ -156,7 +156,7 @@ function VoiceInputButton({ onTranscription, sourceLanguage }) {
     return (
         <div>
             <button onClick={handleRecordButtonClick}>
-                {isRecording ? 'Detener Grabación' : 'Hablar'}
+                {isRecording ? 'Detener Grabación' : 'Speak'}
             </button>
 
              <label>

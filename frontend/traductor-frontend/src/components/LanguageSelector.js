@@ -4,7 +4,7 @@ function LanguageSelector({ sourceLanguage, targetLanguage, onSourceLanguageChan
   return (
     <div>
       <div>
-        <label htmlFor="sourceLanguage">Selecciona el idioma de origen:</label>
+        <label htmlFor="sourceLanguage">Select language origin:</label>
         <select
           id="sourceLanguage"
           value={sourceLanguage}
@@ -16,7 +16,7 @@ function LanguageSelector({ sourceLanguage, targetLanguage, onSourceLanguageChan
         </select>
       </div>
       <div>
-        <label htmlFor="targetLanguage">Selecciona el idioma de destino:</label>
+        <label htmlFor="targetLanguage">Select language to translate:</label>
         <select
           id="targetLanguage"
           value={targetLanguage}

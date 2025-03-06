@@ -4,7 +4,7 @@ function TextAreas({ originalText, translatedText, onTextChange }) {
   return (
     <div>
       <div>
-        <label htmlFor="originalText">Texto Original:</label>
+        <label htmlFor="originalText">Original text:</label>
         <textarea
           id="originalText"
           value={originalText}
@@ -13,7 +13,7 @@ function TextAreas({ originalText, translatedText, onTextChange }) {
         />
       </div>
       <div>
-        <label htmlFor="translatedText">Texto Traducido:</label>
+        <label htmlFor="translatedText">Translated tex:</label>
         <div id="translatedText" className="translated-text-area">
           {translatedText}
         </div>
